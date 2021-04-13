@@ -7,7 +7,9 @@
 
 * SSH-Auto-Restricted checks incoming SSH traffic configurations for security groups using [AWS Config rule](https://docs.aws.amazon.com/config/latest/developerguide/restricted-ssh.html).
 * The rule is COMPLIANT when IP addresses of the incoming SSH traffic in the security groups are restricted (CIDR other than 0.0.0.0/0)
-* This rule applies only to IPv4. 
+* This rule applies only to IPv4.
+* If a security group is changed with SSH traffic CIDR equal to 0.0.0.0/0, the AWS Config rule becomes NON_COMPLIANT
+* The NON_COMPLIANT event triggers an Eventbridge rule which triggers an AWS Lambda function that removes the SSH incoming traffic 
 
 Below is the architecture diagram of the app.
 
