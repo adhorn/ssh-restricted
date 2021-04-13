@@ -1,51 +1,49 @@
 
-# Welcome to your CDK Python project!
+# Welcome to SSH-Auto-Restricted 
 
-This is a blank project for Python development with CDK.
+## SSH-Auto-Restricted deploys an SSH compliance rule with auto-remediation via AWS Lmabda if SSH access is public.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the .env
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
 
-To manually create a virtualenv on MacOS and Linux:
+* SSH-Auto-Restricted checks incoming SSH traffic configurations for security groups using [AWS Config rule](https://docs.aws.amazon.com/config/latest/developerguide/restricted-ssh.html).
+* The rule is COMPLIANT when IP addresses of the incoming SSH traffic in the security groups are restricted (CIDR other than 0.0.0.0/0)
+* This rule applies only to IPv4. 
 
-```
-$ python3 -m venv .env
-```
+Below is the architecture diagram of the app.
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+![](arch.png)
 
-```
-$ source .env/bin/activate
+
+
+### Create Python Virtual Environment
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
 ```
 
-If you are a Windows platform, you would activate the virtualenv like this:
+### Install Python-specific modules
 
-```
-% .env\Scripts\activate.bat
-```
+* Each service such as **lambda** _(`aws_cdk.aws_lambda`)_ or **Config** _(`aws_cdk.aws_config`)_, has its own module which must be defined in `requirements.txt`.
 
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
-$ pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
 ```
 
-At this point you can now synthesize the CloudFormation template for this code.
+### Create Cloudformation from CDK
 
-```
-$ cdk synth
+```bash
+cdk synth
 ```
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
+### Deploy
+
+```bash
+cdk deploy
+```
+
+
+
 
 ## Useful commands
 

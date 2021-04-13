@@ -1,1 +1,7 @@
--e .
+aws-cdk.aws-events
+aws-cdk.aws-iam
+aws-cdk.aws-config
+aws-cdk.aws-events-targets
+aws-cdk.aws-lambda
+aws-cdk.aws-cloudtrail
+aws-cdk.core
