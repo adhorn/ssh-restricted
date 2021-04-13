@@ -1,7 +1,7 @@
 
-# Welcome to SSH-Auto-Restricted 
+# Welcome to SSH-Restricted 
 
-## SSH-Auto-Restricted deploys an SSH compliance rule with auto-remediation via AWS Lmabda if SSH access is public.
+## SSH-Restricted deploys an SSH compliance rule with auto-remediation via AWS Lambda if SSH access is public.
 
 
 
