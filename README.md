@@ -1,5 +1,5 @@
 
-# Welcome to SSH-Restricted 
+# SSH-Restricted 
 
 ## SSH-Restricted deploys an SSH compliance rule with auto-remediation via AWS Lambda if SSH access is public.
 
