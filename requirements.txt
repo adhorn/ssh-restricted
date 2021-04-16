@@ -5,3 +5,4 @@ aws-cdk.aws-events-targets
 aws-cdk.aws-lambda
 aws-cdk.aws-cloudtrail
 aws-cdk.core
+aws-cdk.aws-s3
