@@ -18,6 +18,12 @@
 
 ## Deploying the App to AWS Cloud
 
+### Install CDK
+
+```
+$ npm install -g aws-cdk
+```
+
 ### Create Python Virtual Environment
 
 ```bash
