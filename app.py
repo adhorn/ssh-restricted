@@ -20,11 +20,10 @@ class SshRestrictedStack(core.Stack):
         aws_role = iam.Role(
             self,
             'ConfigRole',
-            assumed_by=iam.ServicePrincipal('config.amazonaws.com'),
-            managed_policies=[
-                iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AWSConfigRole")
-            ]
+            assumed_by=iam.ServicePrincipal('config.amazonaws.com')
         )
+
+        aws_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AWSConfigRole"))
 
         aws_config_recorder = config.CfnConfigurationRecorder(
             self,
@@ -32,8 +31,6 @@ class SshRestrictedStack(core.Stack):
             role_arn=aws_role.role_arn,
             recording_group={"allSupported": True}
         )
-
-        aws_config_recorder.node.add_dependency(aws_role)
 
         aws_config_bucket = s3.Bucket(self, 'ConfigBucket')
 
@@ -44,10 +41,12 @@ class SshRestrictedStack(core.Stack):
             actions=["s3:GetBucketAcl", "s3:ListBucket"]
         ))
 
+        cst_resource = 'AWSLogs/' + core.Stack.of(self).account + '/Config/*'
+
         aws_config_bucket.add_to_resource_policy(iam.PolicyStatement(
             effect=iam.Effect.ALLOW,
             principals=[aws_role],
-            resources=[aws_config_bucket.arn_for_objects('AWSLogs/${cdk.Stack.of(self).account}/Config/*')],
+            resources=[aws_config_bucket.arn_for_objects(cst_resource)],
             actions=["s3:PutObject"],
             conditions={"StringEquals": {
                 "s3:x-amz-acl": "bucket-owner-full-control"}}
