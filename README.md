@@ -11,11 +11,12 @@
 * If a security group is changed with SSH traffic CIDR equal to 0.0.0.0/0, the AWS Config rule becomes NON_COMPLIANT
 * The NON_COMPLIANT event triggers an Eventbridge rule which triggers an AWS Lambda function that removes the SSH incoming traffic 
 
-Below is the architecture diagram of the app.
+### Architecture diagram of the app.
 
 ![](arch.png)
 
 
+## Deploying the App to AWS Cloud
 
 ### Create Python Virtual Environment
 
@@ -25,8 +26,6 @@ source .venv/bin/activate
 ```
 
 ### Install Python-specific modules
-
-* Each service such as **lambda** _(`aws_cdk.aws_lambda`)_ or **Config** _(`aws_cdk.aws_config`)_, has its own module which must be defined in `requirements.txt`.
 
 ```bash
 pip install -r requirements.txt
@@ -43,9 +42,6 @@ cdk synth
 ```bash
 cdk deploy
 ```
-
-
-
 
 ## Useful commands
 
