@@ -16,15 +16,17 @@ class SshRestrictedStack(core.Stack):
     def __init__(self, app: core.App, id: str) -> None:
         super().__init__(app, id)
 
-        # Setting up ConfigurationRecorder and DeliveryChannel in AWS Config
+        # Setting up a role to represent config service principal
         aws_role = iam.Role(
             self,
             'ConfigRole',
             assumed_by=iam.ServicePrincipal('config.amazonaws.com')
         )
 
+        # Adding a managed policy to the above role
         aws_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AWSConfigRole"))
 
+        # Setting up ConfigurationRecorder for AWS Config
         aws_config_recorder = config.CfnConfigurationRecorder(
             self,
             'ConfigRecorder',
@@ -32,8 +34,10 @@ class SshRestrictedStack(core.Stack):
             recording_group={"allSupported": True}
         )
 
+        # Setting up the S3 bucket for Config to deliver the changes
         aws_config_bucket = s3.Bucket(self, 'ConfigBucket')
 
+        # Adding policies to the S3 bucket
         aws_config_bucket.add_to_resource_policy(iam.PolicyStatement(
             effect=iam.Effect.ALLOW,
             principals=[aws_role],
@@ -52,6 +56,7 @@ class SshRestrictedStack(core.Stack):
                 "s3:x-amz-acl": "bucket-owner-full-control"}}
         ))
 
+        # Creating the deliverchannel for Config
         config.CfnDeliveryChannel(
             self,
             'ConfigDeliveryChannel',
@@ -68,6 +73,7 @@ class SshRestrictedStack(core.Stack):
             identifier=config.ManagedRuleIdentifiers.EC2_SECURITY_GROUPS_INCOMING_SSH_DISABLED
         )
 
+        # You cant create a rule if recorder is not enabled
         aws_config_managed_rule.node.add_dependency(aws_config_recorder)
 
         # Event pattern triggered by change in the AWS Config compliance rule
